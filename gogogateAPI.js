@@ -113,7 +113,7 @@ GogogateAPI.prototype = {
             that.log.debug('INFO - LOGIN - login ok');
             // Extract webtoken from response body
             try {
-                const $ = cheerio.load(loginbody);
+                const $ = Cheerio.load(loginbody);
                 const webtokenInput = $('input[name="webtoken"]');
                 
                 if (webtokenInput.length) {
