@@ -1,7 +1,6 @@
 var request = require('request');
 const Cheerio = require('cheerio');
 const GogogateTools = require('./gogogateTools.js');
-const { DOMParser } = require('xmldom');
 
 var EventEmitter = require('events');
 var inherits = require('util').inherits;
@@ -117,16 +116,16 @@ GogogateAPI.prototype = {
         that.log.debug('INFO - LOGIN - login ok');
 
         // Extract webtoken from response body
-		    const parser = new DOMParser();
-		    const htmlDoc = parser.parseFromString(loginResponse.data, 'text/html');
-		    const webtokenInput = htmlDoc.getElementById('webtoken');
-		    
-		    if (webtokenInput) {
-			      this.webtoken = webtokenInput.value;
-			      this.log.info('Webtoken extracted:', this.webtoken);
-		    } else {
-			      this.log.warn('Webtoken not found in the response');
-		    }
+        try {
+          const $ = cheerio.load(loginbody);
+          const webtokenInput = $('input[name="webtoken"]');
+          
+          if (webtokenInput.length) {
+            that.webtoken = webtokenInput.val();
+            that.log.info('Webtoken extracted:', that.webtoken);
+          } else {
+            that.log.warn('Webtoken not found in the response');
+          }
         
         callback(true);
       }
