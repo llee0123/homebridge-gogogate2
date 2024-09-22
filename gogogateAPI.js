@@ -17,7 +17,7 @@ function GogogateAPI(log, platform) {
   this.gogogateIP = platform.gogogateIP;
   this.username = platform.username;
   this.password = platform.password;
-  this.webtoken = null;
+  this.webtoken = '';
   this.discoverdDoors = [];
   this.discoverdSensors = [];
   request = request.defaults({jar: true});
