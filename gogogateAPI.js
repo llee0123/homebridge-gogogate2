@@ -17,6 +17,7 @@ function GogogateAPI(log, platform) {
   this.gogogateIP = platform.gogogateIP;
   this.username = platform.username;
   this.password = platform.password;
+  this.webtoken = null;
   this.discoverdDoors = [];
   this.discoverdSensors = [];
   request = request.defaults({jar: true});
@@ -113,6 +114,19 @@ GogogateAPI.prototype = {
         callback(false);
       } else {
         that.log.debug('INFO - LOGIN - login ok');
+
+        // Extract webtoken from response body
+		    const parser = new DOMParser();
+		    const htmlDoc = parser.parseFromString(response.data, 'text/html');
+		    const webtokenInput = htmlDoc.getElementById('webtoken');
+		    
+		    if (webtokenInput) {
+			      this.webtoken = webtokenInput.value;
+			      this.log.info('Webtoken extracted:', this.webtoken);
+		    } else {
+			      this.log.warn('Webtoken not found in the response');
+		    }
+        
         callback(true);
       }
     });
@@ -233,6 +247,10 @@ GogogateAPI.prototype = {
 
   activateDoor: function (gateId, callback) {
     let commandURL = 'http://' + this.gogogateIP + '/isg/opendoor.php?numdoor=' + gateId;
+    
+    // Append webtoken and status
+    commandURL += '&webtoken=' + encodeURIComponent(this.webtoken);
+    commandURL += '&status=0';
 
     var that = this;
 
