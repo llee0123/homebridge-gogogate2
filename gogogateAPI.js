@@ -118,7 +118,7 @@ GogogateAPI.prototype = {
 
         // Extract webtoken from response body
 		    const parser = new DOMParser();
-		    const htmlDoc = parser.parseFromString(response.data, 'text/html');
+		    const htmlDoc = parser.parseFromString(loginResponse.data, 'text/html');
 		    const webtokenInput = htmlDoc.getElementById('webtoken');
 		    
 		    if (webtokenInput) {
