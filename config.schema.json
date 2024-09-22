@@ -25,6 +25,10 @@
         "title": "Gogogate account password",
         "type": "string"
       },
+      "keycode": {
+        "title": "Gogogate keycode",
+        "type": "string"
+      },
       "refreshTimer": {
         "title": "Refresh timer",
         "type": "integer",
