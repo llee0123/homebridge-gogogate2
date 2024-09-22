@@ -1,6 +1,7 @@
 var request = require('request');
 const Cheerio = require('cheerio');
 const GogogateTools = require('./gogogateTools.js');
+const { DOMParser } = require('xmldom');
 
 var EventEmitter = require('events');
 var inherits = require('util').inherits;
