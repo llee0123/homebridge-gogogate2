@@ -90,47 +90,46 @@ GogogateAPI.prototype = {
 
   login: function (callback) {
     let formData = {
-      login: this.username,
-      pass: this.password,
-      'sesion-abierta': '1',
-      'send-login': 'submit',
+        login: this.username,
+        pass: this.password,
+        'sesion-abierta': '1',
+        'send-login': 'submit',
     };
     let baseURL = 'http://' + this.gogogateIP + '/index.php';
-
     var that = this;
-
     that.log.debug('INFO - LOGIN - trying to log');
-
     request.post({url: baseURL, formData: formData}, function optionalCallback(
-      loginerr,
-      loginResponse,
-      loginbody
+        loginerr,
+        loginResponse,
+        loginbody
     ) {
-      if (loginerr) {
-        that.log('ERROR - LOGIN - login failed:', loginerr);
-        callback(false);
-      } else if (loginbody && loginbody.includes('Wrong login or password')) {
-        that.log('ERROR - LOGIN - Wrong login or password');
-        callback(false);
-      } else {
-        that.log.debug('INFO - LOGIN - login ok');
-
-        // Extract webtoken from response body
-        try {
-          const $ = cheerio.load(loginbody);
-          const webtokenInput = $('input[name="webtoken"]');
-          
-          if (webtokenInput.length) {
-            that.webtoken = webtokenInput.val();
-            that.log.info('Webtoken extracted:', that.webtoken);
-          } else {
-            that.log.warn('Webtoken not found in the response');
-          }
-        
-        callback(true);
-      }
+        if (loginerr) {
+            that.log('ERROR - LOGIN - login failed:', loginerr);
+            callback(false);
+        } else if (loginbody && loginbody.includes('Wrong login or password')) {
+            that.log('ERROR - LOGIN - Wrong login or password');
+            callback(false);
+        } else {
+            that.log.debug('INFO - LOGIN - login ok');
+            // Extract webtoken from response body
+            try {
+                const $ = cheerio.load(loginbody);
+                const webtokenInput = $('input[name="webtoken"]');
+                
+                if (webtokenInput.length) {
+                    that.webtoken = webtokenInput.val();
+                    that.log.info('Webtoken extracted:', that.webtoken);
+                } else {
+                    that.log.warn('Webtoken not found in the response');
+                }
+                callback(true);
+            } catch (error) {
+                that.log.error('ERROR - LOGIN - Failed to extract webtoken:', error);
+                callback(false);
+            }
+        }
     });
-  },
+},
 
   logout: function (callback) {
     let formData = {
