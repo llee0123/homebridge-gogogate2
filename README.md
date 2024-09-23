@@ -20,6 +20,12 @@
 
 This plugin will add your doors connected to gogogate to homekit. It can update in the background so that openning / closing outside home app can trigger your automations. It will also display battery sensor and temperature from your wireless sensors.
 
+## Modifications to make GogoGate2 work with iSmartGate Pro
+First, the reason for this update is because iSmartGate Pro will not maintain an active HomeKit connection.  However, the webservice is fine.
+
+- Login grabs a webtoken (which seems to expire after 1hr)
+- If the gate open fails, try login 1 more time, and call gate open again
+
 ## Installation
 
 1. Install Homebridge using: `npm install -g homebridge`
