@@ -29,6 +29,17 @@ First, the reason for this update is because iSmartGate Pro will not maintain an
 
 ## Installation
 
+Install instructions for this version of the plugin
+
+1. Navigate to the node_modules folder within the terminal
+2. git clone https://github.com/nullnoodle/homebridge-gogogate2
+3. cd homebridge-gogogate2
+4. npm install
+5. Update the `config.json` either in webconsole of homebridge, or locally
+6. restart homebridge
+
+Old Install Instructions
+
 1. Install Homebridge using: `npm install -g homebridge`
 2. Install this plugin using: `npm install -g homebridge-gogogate2`
 3. Update your Homebridge `config.json` using the sample below.
