@@ -254,7 +254,7 @@ GogogateAPI.prototype = {
     var that = this;
 
     that.log(
-        'DEBUG - activateDoor - commandURL-' + JSON.stringify(commandURL)
+        'DEBUG - activateDoor - commandURL-'
     );
 
     request(commandURL, function optionalCallback(statuserror, statusresponse, statusbody) {
