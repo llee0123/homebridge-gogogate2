@@ -263,17 +263,17 @@ GogogateAPI.prototype = {
                 JSON.stringify(statusresponse)
             );
             that.handleError(statuserror);
-            callback(true);
+            callback(false);
         } else {
             if (statusbody.includes("OK")) {
                 that.log.info('INFO - activateDoor - Command sent successfully');
-                callback(false);
+                callback(true);
             } else if (statusbody.includes("Restricted Access") && isRetry) {
                 that.log.warn('WARN - activateDoor - Login required, attempting login');
-                that.login(function(loginError) {
-                    if (loginError) {
+                that.login(function(loginSuccess) {
+                    if (!loginSuccess) {
                         that.log.error('ERROR - activateDoor - Login failed');
-                        callback(true);
+                        callback(false);
                     } else {
                         that.log.info('INFO - activateDoor - Login successful, retrying command one more time');
                         that.activateDoor(gateId, callback, false);
@@ -281,7 +281,7 @@ GogogateAPI.prototype = {
                 });
             } else {
                 that.log.error('ERROR - activateDoor - Unexpected response or retry failed: ' + statusbody);
-                callback(true);
+                callback(false);
             }
         }
     });
