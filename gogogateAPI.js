@@ -244,7 +244,7 @@ GogogateAPI.prototype = {
     });
   },
 
-  activateDoor: function (gateId, callback) {
+  activateDoor: function (gateId, callback, isRetry = true) {
     let commandURL = 'http://' + this.gogogateIP + '/isg/opendoor.php?numdoor=' + gateId;
     
     // Append webtoken and status
@@ -252,28 +252,44 @@ GogogateAPI.prototype = {
     commandURL += '&status=0';
     
     var that = this;
-
-    that.log(
-        'DEBUG - activateDoor - commandURL-'
-    );
+    that.log.debug('DEBUG - activateDoor - commandURL');
 
     request(commandURL, function optionalCallback(statuserror, statusresponse, statusbody) {
-      if (statuserror) {
-        that.log(
-          'ERROR - activateDoor - ERROR while sending command -' +
-            statusbody +
-            '-' +
-            JSON.stringify(statusresponse)
-        );
-        that.handleError(statuserror);
-
-        callback(true);
-      } else {
-        that.log.debug('INFO - activateDoor - Command sent');
-        callback(false);
-      }
+        if (statuserror) {
+            that.log.error(
+                'ERROR - activateDoor - ERROR while sending command -' +
+                statusbody +
+                '-' +
+                JSON.stringify(statusresponse)
+            );
+            that.handleError(statuserror);
+            callback(true);
+        } else {
+            if (statusbody.includes("OK")) {
+                that.log.info('INFO - activateDoor - Command sent successfully');
+                callback(false);
+            } else if (statusbody.includes("Restricted Access") && isRetry) {
+                that.log.warn('WARN - activateDoor - Login required, attempting login');
+                that.login(function(loginError) {
+                    if (loginError) {
+                        that.log.error('ERROR - activateDoor - Login failed');
+                        callback(true);
+                    } else {
+                        that.log.info('INFO - activateDoor - Login successful, retrying command one more time');
+                        that.activateDoor(gateId, callback, false);
+                    }
+                });
+            } else {
+                that.log.error('ERROR - activateDoor - Unexpected response or retry failed: ' + statusbody);
+                callback(true);
+            }
+        }
     });
   },
+
+
+
+  
 };
 
 inherits(GogogateAPI, EventEmitter);
