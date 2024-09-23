@@ -250,8 +250,12 @@ GogogateAPI.prototype = {
     // Append webtoken and status
     commandURL += '&webtoken=' + encodeURIComponent(this.webtoken);
     commandURL += '&status=0';
-
+    
     var that = this;
+
+    that.log(
+        'DEBUG - activateDoor - commandURL-' + JSON.stringify(commandURL)
+    );
 
     request(commandURL, function optionalCallback(statuserror, statusresponse, statusbody) {
       if (statuserror) {
