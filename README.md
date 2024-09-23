@@ -17,6 +17,7 @@
 <img src="https://user-images.githubusercontent.com/19813688/80208881-5d984080-8631-11ea-9903-36224778c8d4.PNG" width="25%" align="right">
 
 [Gogogate 2](https://www.gogogate.com) - old model, not iSmartGate that is natively homekit enabled - plugin for [HomeBridge](https://github.com/nfarina/homebridge) using http calls.
+- This will work with iSmartGate Pro.  Modifications to the login and dooractivate code.  Only to open due to an electric strike setup.
 
 This plugin will add your doors connected to gogogate to homekit. It can update in the background so that openning / closing outside home app can trigger your automations. It will also display battery sensor and temperature from your wireless sensors.
 
